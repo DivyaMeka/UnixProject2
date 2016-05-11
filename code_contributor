@@ -1,0 +1,29 @@
+echo -e "\nLargest source-code file (number of lines) in the Linux kernel:"
+find /usr/local/src/linux-4.4.2/ -name "*.c" -o -name "*.h"  -exec wc -l {} \;| sort -rn|head -1
+
+echo -e "\nNumber of .h files Linus Torvalds worked on:"
+find /usr/local/src/linux-4.4.2/  -name "*.h"|xargs grep -lRi 'Linus Torvalds'|wc -l
+
+echo -e  "\nNumber of .c files Linus Torvalds worked on:"
+find /usr/local/src/linux-4.4.2/  -name "*.c"|xargs grep -lRi 'Linus Torvalds'|wc -l
+
+echo -e "\nNo. of unrelated files Linus Torvalds worked on:"
+find /usr/local/src/linux-4.4.2/ -name "*.c" -o -name "*.h"| xargs grep -ilR 'Linus Torvalds'|xargs  basename -a|sed 's/\(.*\)\..*/\1/'|sort|uniq -u|wc -l
+
+echo -e  "\nLargest source-code file Linus Torvalds worked on :"
+find /usr/local/src/linux-4.4.2/ -name "*.c" -o -name "*.h"| xargs grep -ilR 'Linus Torvalds'|xargs wc -l|sort -nr|sed -n 2p
+
+echo -e "\n10 Largest source-code files in the Linux kernel:"
+find /usr/local/src/linux-4.4.2/ -name "*.c" -o -name "*.h" -exec wc -l {} \;|sort -nr| head -10
+
+echo -e "\n10 Largest .h files Linus Torvalds worked on:"
+find /usr/local/src/linux-4.4.2/ -name "*.h" |xargs egrep -ilR 'Linus Torvalds'|xargs wc -l|sort -nr|head -10
+
+echo -e "\n10 Largest .c files Linus Torvalds worked on:"
+find /usr/local/src/linux-4.4.2/ -name "*.c" |xargs egrep -ilR 'Linus Torvalds'|xargs wc -l|sort -nr|head -10
+
+echo -e  "\n10 Largest unrelated source-code files Linus Torvalds worked on :"
+find /usr/local/src/linux-4.4.2/ -type f -name "*.c" -o -name "*.h"|xargs grep -ilR 'Linus Torvalds' ls -S|sort -nr|xargs  basename -a |sed 's/\(.*\)\..*/\1/'|uniq -u|head -10
+
+echo -e  "\n10 Largest source-code files Linus Torvalds worked on :"
+find /usr/local/src/linux-4.4.2/ -name "*.c" -o -name "*.h"| xargs grep -ilR 'Linus Torvalds'|xargs wc -l|sort -nr|head -11|tail
