@@ -1,0 +1,50 @@
+# syntax _summary
+
+function syntaxsummary
+{
+echo -e "* $1: `srcml --xpath \"//src:$2\" /tmp/dm182report.xml | grep -o \"<$2>\"|wc -l`" >> /tmp/dm182tmp.txt
+}
+
+dirpath="$1"
+echo -e "#Code Summary \n"
+echo -e "* Directory: $dirpath"
+
+
+echo "* Files: `find $dirpath -type f -name *.c -o -name *.h | wc -l`"
+echo -e "* LOC: `find $dirpath -type f -name *.c -o -name *.h -exec wc -l {} \; | awk '{total += $1} END{print total}'`\n"
+
+srcml $dirpath -o /tmp/dm182report.xml
+
+for i in "if" "while" "for" "do" "switch" "case" "expr_stmt" "decl" "struct_decl" "call" "function_decl" "function"
+do
+case $i in
+"if") syntaxsummary if $i
+;;
+"while") syntaxsummary while $i
+;;
+"for") syntaxsummary for $i
+;;
+"do") syntaxsummary "do while" $i
+;;
+"switch") syntaxsummary switch $i
+;;
+"case") syntaxsummary case $i
+;;
+"expr_stmt") syntaxsummary "expression statements" $i
+;;
+"decl") syntaxsummary "variable declarations" $i
+;;
+"struct_decl") syntaxsummary structs $i
+;;
+"call") syntaxsummary "function calls" $i
+;;
+"function_decl") syntaxsummary functions $i
+;;
+"function") syntaxsummary "function definitions" $i
+;;
+esac
+done
+cat /tmp/dm182tmp.txt |sort -t : -k 2 -nr
+rm /tmp/dm182tmp.txt
+rm /tmp/dm182report.xml
+
