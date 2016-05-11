@@ -1,0 +1,3 @@
+filepath="$1"
+echo -e "\n Output of XML Document converted back to text format :\n"
+sed '/<?xml version="1.0" encoding="UTF-8" standalone="yes"?>/d; /<!DOCTYPE/d; /<?xml-/d; s/^[ \t]*//; s/^[ \t]*//; s/<[^>]*>//g; /<!--/,/-->/d; s/<![CDATA[//g; s/]]>//g; /^$/d' $filepath
